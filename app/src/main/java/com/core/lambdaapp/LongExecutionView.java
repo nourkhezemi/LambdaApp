@@ -1,6 +1,5 @@
 package com.core.lambdaapp;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -11,7 +10,7 @@ public class LongExecutionView  extends View {
 
     private Bitmap bitmap;
 
-    public LongExecutionView (Context context) {
+    public LongExecutionView (MainActivity context) {
         super(context);
 
         bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.face_aquamarine);

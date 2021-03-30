@@ -6,13 +6,15 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
+import android.util.AttributeSet;
 import android.view.View;
 
 
 public class FaultyView extends View {
-    public FaultyView(Context context) {
-        super(context);
-    }
+
+        public FaultyView(Context context, AttributeSet attrs) {
+            super(context, attrs);
+        }
 
     @Override
     protected void onDraw(Canvas canvas) {

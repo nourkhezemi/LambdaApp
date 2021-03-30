@@ -16,6 +16,6 @@ public class TrustedView extends View {
         System.out.println("This is a draw !");
         // draw the mPath with the mPaint on the canvas when onDraw
         //canvas.drawPath(mPath, mPaint);
-        invalidate();
     }
 }
+
