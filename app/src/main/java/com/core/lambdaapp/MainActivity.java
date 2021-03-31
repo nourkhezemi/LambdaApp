@@ -1,24 +1,23 @@
 package com.core.lambdaapp;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.Random;
 import java.util.Timer;
-import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +27,13 @@ public class MainActivity extends AppCompatActivity {
     private View LongExecutionView;
     private View LotInstantiationView;
     Timer timer;
+
+    protected FreezingUIReceiver mReceiver = null;
+
+    private static final String TAG = "FreezingActivity";
+    protected static final String FREEZYACTION =
+            "it.gmariotti.android.examples.antipattern.FREEZING_ACTION";
+
 
 
 
@@ -50,98 +56,12 @@ public class MainActivity extends AppCompatActivity {
         lockManager = new LockManager((PowerManager)getSystemService(Context.POWER_SERVICE));
         lockManager.acquire();
         lockManager.release();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        setContentView(new LongExecutionView(this));
+       // setContentView(new LongExecutionView(this));
         //setContentView(new LotInstantiationView(this));
 
-        final Context context = this;
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                context);
-
-        alertDialogBuilder.setTitle("Congratulations");
-
-        alertDialogBuilder
-                .setMessage("Message")
-                .setCancelable(false)
-                .setPositiveButton(getString(R.string.nice), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-
-                    }
-                });
-
-        AlertDialog BoxDialog = alertDialogBuilder.create();
-
-        float[] verts = new float[8];
-        verts[0] = 50;
-        verts[1] = 30;
-
-        verts[2] = 20;
-        verts[3] = 40;
-
-        verts[4] = 2;
-        verts[5] = 79;
-
-        verts[6] = 5;
-        verts[7] = 40;
-
-        int n = 1000;
-        Random r = new Random(1);
-        r.nextInt(Integer.MAX_VALUE);
-
-        int[] ranArray = new int[n];
-        for (int i = 0; i < n; i++) {
-            ranArray[i] = r.nextInt(Integer.MAX_VALUE);
-            switch (ranArray[i]) {
-                case 1:
-                    verts[0] = +1;
-                    break;
-                case 2:
-                    verts[2] = +1;
-                    break;
-                case 3:
-                    verts[4] = +1;
-                    break;
-                case 4:
-                    verts[6] = +1;
-                    break;
-                case 5:
-                    verts[8] = +1;
-                    break;
-                case 6:
-                    verts[10] = +1;
-                    break;
-                case 7:
-                    verts[12] = +1;
-                    break;
-                case 8:
-                    verts[14] = +1;
-                    break;
-                case 9:
-                    verts[16] = +1;
-                    break;
-                case 10:
-                    verts[18] = +1;
-                    break;
-
-            }
-
-
-        }
-        System.out.println("Méthode longue");
-
-
-
-
-    timer = new Timer();
-    timer.schedule(new TimerTask() {
-        @Override
-        public void run() {
-            Intent intent = new Intent(MainActivity.this, LotInstantiationView.class);
-            startActivity(intent);
-            finish();
-        }
-    },10000);
 
         }
 
@@ -150,9 +70,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         System.out.println("Petite pause");
         super.onPause();
+        unregisterReceiver(mReceiver);
 
     }
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mReceiver = new FreezingUIReceiver();
+        registerReceiver(mReceiver, new IntentFilter(FREEZYACTION));
+        System.out.println("OnResume");
+    }
     @Override
     protected void onStop() {
         System.out.println("On stop tout");
@@ -172,6 +99,23 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+    @SuppressLint("WrongConstant")
+    private void newEvent() {
+        Toast.makeText(this, getString(R.string.text_newevent), 1000).show();
+        System.out.println("newEvent");
+    }
+
+    /**
+     * Launch Intent Broadcast
+     */
+    @SuppressLint("WrongConstant")
+    private void launchBroadcast() {
+        Toast.makeText(this, getString(R.string.text_broadcast), 1000).show();
+        Intent i = new Intent(FREEZYACTION);
+        sendBroadcast(i);
+        System.out.println("Launch brodcast");
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -182,9 +126,18 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            
             return true;
         }
+        if(id == R.id.mnuRefresh) {
 
+            return true;
+
+        }
+        if(id == R.id.mnunewevent) {
+            return true;
+
+        }
         return super.onOptionsItemSelected(item);
     }
 

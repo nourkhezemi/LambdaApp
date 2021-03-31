@@ -23,7 +23,7 @@ public class LotInstantiationView extends View {
     public LotInstantiationView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
-    
+
 
 
     public LotInstantiationView(Context context, AttributeSet attrs, int defStyle) {
