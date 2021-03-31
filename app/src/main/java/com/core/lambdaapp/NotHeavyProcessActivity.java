@@ -22,9 +22,9 @@ public class NotHeavyProcessActivity extends AppCompatActivity {
 
     protected FreezingUIReceiver mReceiver = null;
 
-    private static final String TAG = "FreezingActivity";
+    private static final String TAG = "NoFreezingActivity";
     protected static final String FREEZYACTION =
-            "it.gmariotti.android.examples.antipattern.FREEZING_ACTION";
+            "no freezing";
 
     @Override
     protected void onPause() {
