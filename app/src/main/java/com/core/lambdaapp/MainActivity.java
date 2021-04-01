@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -57,9 +57,11 @@ public class MainActivity extends AppCompatActivity {
         lockManager.acquire();
         lockManager.release();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-       // setContentView(new LongExecutionView(this));
-        //setContentView(new LotInstantiationView(this));
+//Par defaut TrustyView
+       super.onCreate(savedInstanceState);
+       super.setContentView(new LongExecutionView(this));
+       // super.setContentView(new LotInstantiationView(this));
+        // super.setContentView(new FaultyView(this));
 
 
 

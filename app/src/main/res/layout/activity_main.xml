@@ -30,18 +30,4 @@
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@android:drawable/ic_dialog_email" />
 
-    <com.core.lambdaapp.FaultyView
-        android:id="@+id/view4"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:translationX="250dp"
-        android:translationY="250dp" />
-
-    <com.core.lambdaapp.TrustedView
-        android:id="@+id/view5"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:translationX="250dp"
-        android:translationY="450dp" />
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

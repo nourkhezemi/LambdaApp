@@ -11,7 +11,9 @@ public class LongExecutionView  extends View {
     private Bitmap bitmap;
 
     public LongExecutionView (MainActivity context) {
-        super(context);
+
+            super(context);
+        ;
 
         bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.face_aquamarine);
     }
