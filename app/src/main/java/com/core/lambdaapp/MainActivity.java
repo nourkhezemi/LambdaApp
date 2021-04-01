@@ -1,6 +1,7 @@
 package com.core.lambdaapp;
 
 import android.annotation.SuppressLint;
+import android.content.ComponentCallbacks2;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -17,7 +18,8 @@ import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.Timer;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,8 +28,8 @@ public class MainActivity extends AppCompatActivity {
     private StructuresManager structureManager;
     private View LongExecutionView;
     private View LotInstantiationView;
-    Timer timer;
 
+    protected static List<IMemoryInfo> memInfoList = new ArrayList<IMemoryInfo>();
     protected FreezingUIReceiver mReceiver = null;
 
     private static final String TAG = "FreezingActivity";
@@ -66,6 +68,38 @@ public class MainActivity extends AppCompatActivity {
 
 
         }
+    public static abstract interface IMemoryInfo {
+        public void goodTimeToReleaseMemory();
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+//don't compare with == as intermediate stages also can be reported, always better to check >= or <=
+        if (level >= ComponentCallbacks2.TRIM_MEMORY_RUNNING_LOW) {
+            try {
+                // Activity at the front will get earliest than activity at the
+                // back
+                for (int i = memInfoList.size() - 1; i >= 0; i--) {
+                    try {
+                        memInfoList.get(i).goodTimeToReleaseMemory();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public static void registerMemoryListener(IMemoryInfo implementor) {
+        memInfoList.add(implementor);
+    }
+
+    public static void unregisterMemoryListener(IMemoryInfo implementor) {
+        memInfoList.remove(implementor);
+    }
+
 
 
     @Override
